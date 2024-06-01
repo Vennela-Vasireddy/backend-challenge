@@ -5,6 +5,7 @@ class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
         fields = '__all__'
+        read_only_fields = ['owner']
         #fields = ['id', 'name']
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -12,6 +13,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
+        read_only_fields = ['owner']
         #fields = ['id', 'title', 'description', 'completion_status', 'labels']
 
         
