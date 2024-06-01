@@ -14,14 +14,16 @@ class TaskLabelTests(TestCase):
         self.label = Label.objects.create(name='Work', owner=self.user)
         self.task = Task.objects.create(title='Test Task', description='Test Description', completion_status=False, owner=self.user)
         self.task.labels.add(self.label)
-
+    
+     # Unittest to create label
     def test_create_label(self):
         response = self.client.post('/api/labels/', {'name': 'Personal'}, format='json')
         print(response.data)  # Print the response content for debugging
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Label.objects.count(), 2)
         self.assertEqual(Label.objects.get(id=2).name, 'Personal')
-
+    
+    # Unittest to create task
     def test_create_task(self):
         response = self.client.post('/api/tasks/', {
             'title': 'New Task',
@@ -34,18 +36,22 @@ class TaskLabelTests(TestCase):
         self.assertEqual(Task.objects.count(), 2)
         self.assertEqual(Task.objects.get(id=2).title, 'New Task')
 
+
+    # test list of tasks
     def test_list_tasks(self):
         response = self.client.get('/api/tasks/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['title'], 'Test Task')
-
+    
+    # test list of labels
     def test_list_labels(self):
         response = self.client.get('/api/labels/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['name'], 'Work')
     
+    # Unittest to update Label
     def test_update_task(self):
         task_id = self.task.id
         response = self.client.put(f'/api/tasks/{task_id}/', {
@@ -61,14 +67,16 @@ class TaskLabelTests(TestCase):
         self.assertTrue(updated_task.completion_status)
         self.assertEqual(updated_task.labels.count(), 1)
         self.assertEqual(updated_task.labels.first().name, 'Work')
-
+    
+    # Unittest to delete task
     def test_delete_task(self):
         task_id = self.task.id
         response = self.client.delete(f'/api/tasks/{task_id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(Task.DoesNotExist):
             Task.objects.get(id=task_id)
-
+    
+    # Unittest to update Label
     def test_update_label(self):
         label_id = self.label.id
         response = self.client.put(f'/api/labels/{label_id}/', {'name': 'Updated Label'}, format='json')
@@ -76,6 +84,7 @@ class TaskLabelTests(TestCase):
         updated_label = Label.objects.get(id=label_id)
         self.assertEqual(updated_label.name, 'Updated Label')
 
+    # Unittest to delete Label
     def test_delete_label(self):
         label_id = self.label.id
         response = self.client.delete(f'/api/labels/{label_id}/')
