@@ -1,3 +1,4 @@
+# This file contains the view functions or classes that handle HTTP requests and return responses
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated

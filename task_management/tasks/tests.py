@@ -1,3 +1,5 @@
+# This file contains unit tests for the app
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
@@ -43,3 +45,40 @@ class TaskLabelTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['name'], 'Work')
+    
+    def test_update_task(self):
+        task_id = self.task.id
+        response = self.client.put(f'/api/tasks/{task_id}/', {
+            'title': 'Updated Task',
+            'description': 'Updated Description',
+            'completion_status': True,
+            'labels': [self.label.id]
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_task = Task.objects.get(id=task_id)
+        self.assertEqual(updated_task.title, 'Updated Task')
+        self.assertEqual(updated_task.description, 'Updated Description')
+        self.assertTrue(updated_task.completion_status)
+        self.assertEqual(updated_task.labels.count(), 1)
+        self.assertEqual(updated_task.labels.first().name, 'Work')
+
+    def test_delete_task(self):
+        task_id = self.task.id
+        response = self.client.delete(f'/api/tasks/{task_id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(Task.DoesNotExist):
+            Task.objects.get(id=task_id)
+
+    def test_update_label(self):
+        label_id = self.label.id
+        response = self.client.put(f'/api/labels/{label_id}/', {'name': 'Updated Label'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_label = Label.objects.get(id=label_id)
+        self.assertEqual(updated_label.name, 'Updated Label')
+
+    def test_delete_label(self):
+        label_id = self.label.id
+        response = self.client.delete(f'/api/labels/{label_id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(Label.DoesNotExist):
+            Label.objects.get(id=label_id)
