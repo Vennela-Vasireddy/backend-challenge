@@ -16,11 +16,12 @@ def __str__(self):
 
 # Creating task model here
 class Task(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     completion_status = models.BooleanField(default=False)
     owner = models.ForeignKey(User, related_name='tasks', on_delete= models.CASCADE)
     labels = models.ManyToManyField(Label, related_name='tasks')
     
+
 def __str__(self):
     return self.title
