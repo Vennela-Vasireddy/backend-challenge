@@ -9,12 +9,10 @@ class LabelSerializer(serializers.ModelSerializer):
         model = Label
         fields = '__all__'
         read_only_fields = ['owner']
-        
 
 
 # Task model as the model to serialize.
 class TaskSerializer(serializers.ModelSerializer):
-    labels = LabelSerializer(many=True, read_only=True) # Nested serializer for the labels
     class Meta:
         model = Task
         fields = '__all__'

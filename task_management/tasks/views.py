@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Task, Label
 from .serializers import TaskSerializer, LabelSerializer
 
+
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -16,6 +17,9 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def perform_update(self, serializer):
+        serializer.save(owner=self.request.user)
+
 class LabelViewSet(viewsets.ModelViewSet):
     queryset = Label.objects.all()
     serializer_class = LabelSerializer
@@ -25,4 +29,7 @@ class LabelViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
         serializer.save(owner=self.request.user)
