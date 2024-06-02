@@ -1,6 +1,6 @@
 # Task Management
 
-This is a Django-based Task Management API that allows users to create, update, delete, and retrieve tasks and labels. The API supports user-specific data access, ensuring that users only see their own tasks and labels.
+A Django-based Task Management that allows users to create, update, delete, and retrieve tasks and labels. The API supports user-specific data access, ensuring that users only see their own tasks and labels.
 
 ### Installation
 
@@ -114,3 +114,15 @@ Copy the token from the response.
      "labels": [1] // Use the ID of the label you created
    }
    ```
+
+#### Users for Admin Site
+
+```
+  To log into admin site, we can use the superuser credentials created earlier.
+
+  As per the readme file I have created two users
+
+  Username: bunny, Password: bunny123
+  Username: micky, Password: micky123
+
+```
